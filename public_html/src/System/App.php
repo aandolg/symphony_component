@@ -21,6 +21,7 @@ class App
     private $controller;
     private $arguments;
     private $basePath;
+    private $container;
 
     public static $instance = null;
 
@@ -76,7 +77,7 @@ class App
     {
         return (new ArgumentResolver())->getArguments($this->request, $controller);
     }
-    
+
     public function run()
     {
         $matcher = new UrlMatcher($this->routes, $this->requestContext);
@@ -90,5 +91,19 @@ class App
         }
 
         $response->send();
+    }
+
+    public function add($key, $obj)
+    {
+        $this->container[$key] = $obj;
+        return $obj;
+    }
+
+    public function get($key) {
+        if (isset($this->container[$key])) {
+            return $this->container[$key];
+        }
+
+        return null;
     }
 }
